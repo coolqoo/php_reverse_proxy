@@ -179,7 +179,7 @@ $config = array (
 
 	//静态文件
 	if(in_array($thisExt,explode("|",$config['diyStatic']))){
-		$filename = dirname(ADIR).'/'.substr($_SERVER['REDIRECT_URL'],strlen(siteUri()));
+		$filename = __DIR__.'/'.substr($_SERVER['REDIRECT_URL'],strlen(siteUri()));
 		save_file($filename,$snoopy->results);
 	}
 

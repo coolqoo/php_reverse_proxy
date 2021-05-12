@@ -1,27 +1,6 @@
 <?php
-//输入
-function _e($str){
-	echo $str;
-}
-//模版
-function tpl($name){
-	return ADIR.'template/'.$name.'.php';
-}
-//widget
-function w($name){
-	require_once(ADIR.'includes/widget.php');
-    return new widget($name);
-}
-//data
-function d($name){
-	require_once(ADIR.'includes/data.php');
-	static $instance=array();
-    if (@is_null($instance[$name]) && preg_match("/^[a-z|0-9|A-Z|_]+$/",$name)){
-    	return $instance[$name] = new data($name);
-    }
-    return $instance[$name];
-}
-//处理变量
+
+//��������
 /**
  * {g:a} = $_GET['a']
  * {p:a} = $_POST['a']
@@ -54,30 +33,31 @@ function siteUri(){
 	$sitefolder=explode('.php', $_SERVER['PHP_SELF']);
 	return trim(dirname($sitefolder[0]),DIRECTORY_SEPARATOR).'/';
 }
-	
+
 function send_header($headers,$cookies=1){
 	$return;
 	if(is_array($headers))
 	foreach($headers as $value){
-		$arr=split(": ",$value);
+		$arr=explode(": ",$value);
 		if($arr[0]!="Set-Cookie"){
 			if($arr[0]!="Transfer-Encoding")
 			header($value);
 		}else{
 			if($cookies){
-				$arr=split(";",$arr[1]);
-				$arr_value = split("=",$arr[0]);
+				$arr=explode(";",$arr[1]);
+				$arr_value = explode("=",$arr[0]);
 				setcookie($arr_value[0],$arr_value[1]);
 			}
 		}
 		if($arr[0]=="Content-Type"){
-			$arr=split("; charset=",$arr[1]);
+			$arr=explode("; charset=",$arr[1]);
 			$arr[0] = trim($arr[0]);
 			$return = $arr;
 		}
 	}
 	return $return;
 }
+
 function get_header($headers,$name=NULL){
 	$return=array();
 	if(is_array($headers))
@@ -91,6 +71,7 @@ function get_header($headers,$name=NULL){
 	if(empty($name))
 		return $return;
 }
+
 function get_cookies($headers){
 	$cookies = "";
 	if(is_array($headers))
@@ -127,18 +108,18 @@ function form2array($html){
 	}
 	return $arr;
 }
-function get_ip(){ 
-    if (@$_SERVER['HTTP_CLIENT_IP'] && $_SERVER['HTTP_CLIENT_IP']!='unknown') {   
-        $ip = $_SERVER['HTTP_CLIENT_IP'];   
-    } elseif (@$_SERVER['HTTP_X_FORWARDED_FOR'] && $_SERVER['HTTP_X_FORWARDED_FOR']!='unknown') {   
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];   
-    } else {   
-        $ip = $_SERVER['REMOTE_ADDR'];   
-    }   
-    return $ip;   
+function get_ip(){
+    if (@$_SERVER['HTTP_CLIENT_IP'] && $_SERVER['HTTP_CLIENT_IP']!='unknown') {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (@$_SERVER['HTTP_X_FORWARDED_FOR'] && $_SERVER['HTTP_X_FORWARDED_FOR']!='unknown') {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
 }
 /**
- * mdir加强版,支持多重文件夹建立
+ * mdir��ǿ��,֧�ֶ����ļ��н���
 */
 function mdir2($path){
 	$path2 = $path;
@@ -148,12 +129,12 @@ function mdir2($path){
 	foreach (explode('/',str_replace($path2, '', $path)) as $value){
 		$path2 .= $value.'/';
 		if(!is_dir($path2))
-			@mkdir($path2, 0777); 
+			@mkdir($path2, 0777);
 	}
 }
 
 /**
- * 保存文件
+ * �����ļ�
  */
 function save_file($filename,$data){
 	$pathinfo = pathinfo($filename);
@@ -162,5 +143,5 @@ function save_file($filename,$data){
 	}
 	mdir2(dirname($filename));
 	file_put_contents($filename, $data);
-}	
+}
 ?>
